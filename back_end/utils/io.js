@@ -1,3 +1,4 @@
+const chatCnotroller = require("../Controllers/chat.controller");
 const userController = require("../Controllers/user.controller");
 
 module.exports = function(io) {
@@ -12,6 +13,24 @@ module.exports = function(io) {
                 const user = await userController.saveUser(userName,socket.id);
                 cb({ok:true, data:user});
             }catch(error){
+                cb({ok:false, error: error.message});
+            }
+            
+        });
+
+        //메시지 받을 때
+        socket.on("sendMessage",async(message,cb)=>{
+            try {
+                //socket id 로 유저 찾기
+                const user = userController.chckUser(socket.id);
+                //메시지 저장
+                const newMessage = await chatCnotroller.saveChat(message,user);
+                
+                //저장 후 단순 콜백 x 접속해 있는 사람들에게 알려준다
+                io.emit("message",newMessage);
+                cb({ok:true});
+
+            } catch(error){
                 cb({ok:false, error: error.message});
             }
             

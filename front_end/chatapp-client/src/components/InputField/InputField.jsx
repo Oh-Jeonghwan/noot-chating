@@ -7,7 +7,7 @@ const InputField = ({message,setMessage,sendMessage}) => {
   return (
     <div className="input-area">
           <div className="plus-button">+</div>
-          <form onSubmit={sendMessage} className="input-container">
+          <form onSubmit={sendMessage} className="input-container"> {/*onSubmit는 웹페이지를 새로고침함*/}
             <Input
               placeholder="Type in here…"
               value={message}
