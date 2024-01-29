@@ -8,10 +8,10 @@ function App() {
   const [user,setUser] = useState(null);
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  console.log("message List", messageList);
   
   useEffect(()=>{
     socket.on("message",(message)=>{
+      //기존에 있던 스테이트(prevState)에 붙여주세요.
       setMessageList((prevState)=>prevState.concat(message)); //what prevState????
     });
     askUserName();
@@ -31,7 +31,8 @@ function App() {
   const sendMessage = (event) => {
     event.preventDefault(); //onSubmit의 새로고침 방지
     socket.emit("sendMessage",message,(res)=>{
-      console.log("sendMessage res",res);
+    let inputBox = document.getElementById("inputBox");
+    inputBox.value="";  
     });
   };
   return (

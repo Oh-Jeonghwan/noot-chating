@@ -11,6 +11,14 @@ module.exports = function(io) {
             //유저정보를 저장
             try{
                 const user = await userController.saveUser(userName,socket.id);
+                
+                const welcomeMessage={
+                    chat:`${user.name} is joined to ths room`,
+                    user: {id:null, name: "system"}
+                };
+
+                io.emit("message", welcomeMessage);
+
                 cb({ok:true, data:user});
             }catch(error){
                 cb({ok:false, error: error.message});
@@ -22,7 +30,7 @@ module.exports = function(io) {
         socket.on("sendMessage",async(message,cb)=>{
             try {
                 //socket id 로 유저 찾기
-                const user = userController.chckUser(socket.id);
+                const user = await userController.chckUser(socket.id);
                 //메시지 저장
                 const newMessage = await chatCnotroller.saveChat(message,user);
                 
